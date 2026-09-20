@@ -2,12 +2,16 @@
 
 ESP-IDF project for an ESP32 (Elegoo ESP32 board) reading temperature/humidity from a DHT11 sensor.
 
-> **Status:** project skeleton only — `main/main.c` currently has an empty `app_main()`. DHT11 sensor reading is not yet implemented.
+Every 2 seconds, `app_main()` reads the DHT11 via the [esp-idf-lib/dht](https://components.espressif.com/components/esp-idf-lib/dht) component and logs the result over UART, e.g.:
+
+```
+I (2345) dht11: Temperature: 24.0 C (75.2 F), Humidity: 55.0 %
+```
 
 ## Requirements
 
 - [ESP-IDF](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/index.html) (target chip: `esp32`)
-- A DHT11 sensor wired to the board (data pin + pull-up resistor, per the Elegoo kit wiring diagram)
+- A DHT11 sensor wired to the board (data pin + pull-up resistor, per the Elegoo kit wiring diagram). The data pin GPIO is set by `DHT_GPIO_PIN` in [main/main.c](main/main.c) — update it to match your wiring.
 
 ## Building and flashing
 
@@ -28,13 +32,13 @@ A dev container is provided under [.devcontainer/](.devcontainer/) based on the 
 
 ```
 main/
-  main.c          # application entry point (app_main)
-  CMakeLists.txt  # component registration
-CMakeLists.txt    # top-level ESP-IDF project file
-sdkconfig         # generated project configuration (target: esp32)
+  main.c            # application entry point (app_main): reads DHT11, logs C/F + humidity
+  idf_component.yml # declares the esp-idf-lib/dht dependency
+  CMakeLists.txt    # component registration
+CMakeLists.txt      # top-level ESP-IDF project file
+sdkconfig           # generated project configuration (target: esp32)
 ```
 
 ## Next steps
 
-- Wire up the DHT11 driver (bit-banged single-wire protocol or an existing ESP-IDF component) and read temperature/humidity in `app_main`.
-- Log or publish sensor readings (e.g. via UART log output, MQTT, etc.).
+- Publish sensor readings somewhere beyond the UART log (e.g. MQTT, a web server, etc.).
