@@ -17,7 +17,8 @@ void app_main(void)
         esp_err_t result = dht_read_float_data(DHT_TYPE_DHT11, DHT_GPIO_PIN, &humidity, &temperature);
 
         if (result == ESP_OK) {
-            ESP_LOGI(TAG, "Temperature: %.1f C, Humidity: %.1f %%", temperature, humidity);
+            float temperature_f = temperature * 9.0f / 5.0f + 32.0f;
+            ESP_LOGI(TAG, "Temperature: %.1f C (%.1f F), Humidity: %.1f %%", temperature, temperature_f, humidity);
         } else {
             ESP_LOGE(TAG, "Failed to read from DHT11 sensor (error %d)", result);
         }
